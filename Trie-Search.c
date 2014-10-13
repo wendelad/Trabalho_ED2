@@ -71,7 +71,6 @@ int main(int argc, char *argv[]){
 	char *palavra;
 	int nl=0;
 	
-	
 	if(arq && arq2 == NULL)
 		printf("Erro, nao foi possivel abrir os arquivos\n");
 	else
@@ -86,7 +85,6 @@ int main(int argc, char *argv[]){
 	while( (ch2=fgetc(arq2))!= EOF )
 		tam2++;
 		char word2[tam2];
-		//char word3[tam2];
 		
 	//inserindo o arquivo 1
 
@@ -98,8 +96,6 @@ int main(int argc, char *argv[]){
 				j++;
 			
 			}else{
-
-				
 				word[j]= '\0';
 				j = 0;
 				inserir(&raiz,word);
@@ -107,7 +103,6 @@ int main(int argc, char *argv[]){
 				
 			}
 		}
-		
 	//buscando o arquivo2
 		
 	rewind(arq2);
@@ -115,7 +110,6 @@ int main(int argc, char *argv[]){
 	while( (ch2=fgetc(arq2))!= EOF ){
 		if(ch2 != '\n'){
 			word2[k] = ch2;
-			//palavra[i]=word2[k];
 			k++;
 		
 		}else{
@@ -145,3 +139,4 @@ int main(int argc, char *argv[]){
 	fclose(arq2);
 	return 0;
 }
+
