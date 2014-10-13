@@ -87,7 +87,6 @@ int main(int argc, char *argv[]){
 		char word2[tam2];
 		
 	//inserindo o arquivo 1
-
 		rewind(arq);
 		while( (ch=fgetc(arq))!= EOF ){
 			
@@ -114,23 +113,17 @@ int main(int argc, char *argv[]){
 		
 		}else{
 			linha++;
-			
 			word2[k]= '\0';
 			k = 0;
-			
 			achou=busca_palavra(&raiz,word2);
 			
 			if(achou ==1){
-				
 				for(i=0;i<=strlen(word2);i++)
 				palavra[i]=word2[i];
-				//printf("%d",i);
 				
 				if(busca_palavra(&raiz,palavra))
-				
-				printf("achou! %s %d",palavra,linha);
-				printf("\n");
-			
+					printf("achou! %s %d",palavra,linha);
+					printf("\n");
 			}
 		}
 	}
