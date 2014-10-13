@@ -1,5 +1,5 @@
 all:
-	gcc Trie-Search.c -o a.out
+	gcc Trie-search.c -o a.out
 
 clean:
 	rm *.o *.*~ *~ 
