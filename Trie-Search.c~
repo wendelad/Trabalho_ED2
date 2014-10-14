@@ -43,7 +43,6 @@ void inserir(node **No, char *word){
 			}else
 			(*No)->flag = 1;
 		}
-		
 }
 
 int busca_palavra(node **No, char *word){
@@ -54,7 +53,7 @@ int busca_palavra(node **No, char *word){
         return((*No)->flag ? 1:0);
         
     else
-		return busca_palavra(&(*No)->chave[word[0]- 'a'], word+1);
+	return busca_palavra(&(*No)->chave[word[0]- 'a'], word+1);
 }
 
 int main(int argc, char *argv[]){

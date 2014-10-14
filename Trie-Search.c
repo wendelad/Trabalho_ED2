@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#define Insert 1 
+#define Replace 1 
+#define Deleta 1 
 int achou;
 
 struct no {
@@ -22,6 +24,51 @@ void inicializa(node **No){
 	*No = NULL;
 	}
 	
+//Distância de Edição
+
+int minimo(int a, int b, int c)
+{
+    int min = c;
+ 
+    if( a < b )
+    {
+        if( a < c )
+        {
+            min = a;
+        }
+    }
+    else
+    {
+        if( b < c )
+        {
+            min = b;
+        }
+    }
+ 
+    return min;
+}
+ 
+int LevenshteinDistance(char *x, char *y)
+{
+    int d,e,f;
+ 
+    /* Casos Base */
+ 
+    if(*x==0)return strlen(y);
+    if(*y== 0)return strlen(x);
+ 
+ 
+ 
+    if(*x==*y)
+         d=LevenshteinDistance(x+1,y+1);
+    else
+         d=Replace+LevenshteinDistance(x+1,y+1); /*replace*/
+    e=Insert+LevenshteinDistance(x,y+1); /*insert*/
+    f=Deleta+LevenshteinDistance(x+1,y); /*deleta*/
+ 
+    return minimo(d,e,f);
+}
+ 
 void inserir(node **No, char *word){
 	int i;
 	
@@ -43,6 +90,7 @@ void inserir(node **No, char *word){
 			}else
 			(*No)->flag = 1;
 		}
+		
 }
 
 int busca_palavra(node **No, char *word){
@@ -53,14 +101,14 @@ int busca_palavra(node **No, char *word){
         return((*No)->flag ? 1:0);
         
     else
-	return busca_palavra(&(*No)->chave[word[0]- 'a'], word+1);
+		return busca_palavra(&(*No)->chave[word[0]- 'a'], word+1);
 }
+
 
 int main(int argc, char *argv[]){
 	int j=0,k=0,i=0;
 	node *raiz;
-	int linha=0;
-	//char word[200000]word2[200000];
+	int linha=1;
 	FILE *arq, *arq2;
 	char ch,ch2;
 	int tam1,tam2,a;
@@ -68,7 +116,7 @@ int main(int argc, char *argv[]){
 	arq = fopen(argv[1], "r");
 	arq2 = fopen(argv[2], "r");
 	char *palavra;
-	int nl=0;
+	
 	
 	if(arq && arq2 == NULL)
 		printf("Erro, nao foi possivel abrir os arquivos\n");
@@ -87,31 +135,59 @@ int main(int argc, char *argv[]){
 		
 	//inserindo o arquivo 1
 		rewind(arq);
-		while( (ch=fgetc(arq))!= EOF ){
+		while( (ch=fgetc(arq))!= EOF || (ch=fgetc(arq))== '\n' ){
 			
-			if(ch != '\n'){
+			if ((ch != '\n')&&(ch != ' ')&&(ch != '-')&&(ch != '.')&&(ch != ',')&&(ch != '!')&&(ch != '?')){
 				word[j] = ch;
 				j++;
 			
 			}else{
+				
 				word[j]= '\0';
 				j = 0;
 				inserir(&raiz,word);
-				nl++;	
-				
+					
 			}
 		}
+		
+		if (word[0] != '\0'){
+			word[j] = '\0';
+			inserir(&raiz,word);
+		}
+		
+	
+		
+		//printf("\naqui%s\n",word);
 	//buscando o arquivo2
 		
 	rewind(arq2);
 	palavra = malloc(sizeof(tam2));
-	while( (ch2=fgetc(arq2))!= EOF ){
-		if(ch2 != '\n'){
+	while( (ch2=fgetc(arq2))!= EOF){
+		if((ch2 != '\n')&&(ch2 != ' ')&&(ch2 != '-')&&(ch2 != '.')&&(ch2 != ',')&&(ch2 != '!')&&(ch2 != '?')){
 			word2[k] = ch2;
 			k++;
 		
 		}else{
-			linha++;
+
+			word2[k]= '\0';
+			k = 0;
+			achou=busca_palavra(&raiz,word2);
+			
+			if(achou ==1){
+				printf("%s %d",word2,linha);
+				for(i=0;i<=strlen(word2);i++)
+				palavra[i]=word2[i];
+				
+				if(busca_palavra(&raiz,palavra))
+					//printf("%s %d",palavra,linha);
+					//printf("%s",palavra);
+					printf("\n");
+			}
+						if(ch2 == '\n')
+				linha++;
+		}
+	}if (word2[0] != '\0'){
+		//linha++;
 			word2[k]= '\0';
 			k = 0;
 			achou=busca_palavra(&raiz,word2);
@@ -121,11 +197,17 @@ int main(int argc, char *argv[]){
 				palavra[i]=word2[i];
 				
 				if(busca_palavra(&raiz,palavra))
-					printf("achou! %s %d",palavra,linha);
+				//linha = linha-1;
+				printf("%s %d",word2,linha);
+					//printf("%s %d",palavra,linha);
+					//printf("%s",palavra);
 					printf("\n");
 			}
-		}
+			if(ch2 == '\n')
+				linha++;
 	}
+	
+		
 	scanf("%d",&a);// variável apenas para aguardar outro caractere para não fechar terminal
 	fclose(arq);
 	fclose(arq2);
