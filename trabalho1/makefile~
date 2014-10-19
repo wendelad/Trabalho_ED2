@@ -1,0 +1,5 @@
+all:
+	gcc ListaEnc.c -o a.out
+
+clean:
+	rm *.o *.*~ *~ 
